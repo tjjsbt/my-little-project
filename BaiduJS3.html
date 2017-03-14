@@ -40,8 +40,9 @@
         var data = [];
         var str = "";
         var temp = [];
+        //循环提取地市名称和空气质量
         for (var i = 1; i < ulNode.childNodes.length; i += 2) {
-            str = ulNode.childNodes.item(i).innerText;
+            str = ulNode.childNodes.item(i).textContent;
             temp = str.split("空气质量：");
             data.push(temp);
         }
@@ -64,6 +65,7 @@
      * 返回一个排序后的数组
      */
     function sortAqiData(data) {
+        //数组排序
         return data.sort(function(a, b) {
             if (a[1] > b[1]) {
                 return -1;
@@ -85,8 +87,9 @@
 
     var chNum = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
 
-    function render(data) {
+    function render(data) {        
         var newUlNode = document.getElementById("resort");
+        //输出新的空气排行列表
         for (var i = 0; i < data.length; i++) {
             var newNode = document.createElement("li");
             var liStr = "";
@@ -100,11 +103,8 @@
 
     function btnHandle() {
         var aqiData = getData();
-        console.log(aqiData);
         aqiData = sortAqiData(aqiData);
-        console.log(aqiData);
         render(aqiData);
-        console.log(aqiData);
     }
 
     function init() {

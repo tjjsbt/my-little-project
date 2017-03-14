@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>任务四：基础JavaScript练习（一）</title>
+	<style type="text/css">
+		span{
+			display: inline-block;
+			margin: 10px 5px;
+			padding: 0px 10px;
+			height: 30px;
+			background: red;
+			color: #fff;
+			line-height: 30px;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<input type="text" id="num">
+	<button id="left-in">左侧入</button>
+	<button id="right-in">右侧入</button>
+	<button id="left-out">左侧出</button>
+	<button id="right-out">右侧出</button>
+
+	<div id="queue"></div>
+
+	<script type="text/javascript">
+	// leftIn方法，点击左侧入按钮将输入的数字从左侧添加
+		function leftIn(queue){
+			var num = document.getElementById('num').value;
+			if(checkInput(num)){
+				var span = document.createElement('span');
+				span.innerHTML = num;
+
+				queue.insertBefore(span,queue.childNodes[0]);
+			}
+		}
+		// rightIn方法，点击右侧入按钮将输入的数字从右侧添加
+		function rightIn(queue){
+			var num = document.getElementById('num').value;
+			if(checkInput(num)){
+				var span = document.createElement('span');
+				span.innerHTML = num;
+
+				queue.appendChild(span);
+			}
+		}
+		// leftOut方法，点击"左侧出"，读取并删除队列左侧第一个元素，并弹窗显示元素中数值；
+		function leftOut(queue){
+			var child = queue.firstChild;
+			alert(child.textContent);
+			queue.removeChild(child);
+		}
+		// rightOut方法，点击"右侧出"，读取并删除队列又侧第一个元素，并弹窗显示元素中数值；
+		function rightOut(queue){
+			var child = queue.lastChild;
+			alert(child.textContent);
+			queue.removeChild(child);
+		}
+		//检查输入内容是否合法
+		function checkInput(num){
+			reg = /\d*/;
+			if(num == ''){
+				alert("输入不能是空白！");
+				return false;
+			}else if(!reg.test(num)){
+				alert("只能输入整数！");
+			}else return true;
+		}
+
+		(function(){
+			var queue = document.getElementById('queue');
+
+			document.getElementById("left-in").onclick = function(){
+				leftIn(queue);
+			};
+			document.getElementById("right-in").onclick = function(){
+				rightIn(queue);
+			};
+			document.getElementById("left-out").onclick = function(){
+				leftOut(queue);
+			};
+			document.getElementById("right-out").onclick = function(){
+				rightOut(queue);
+			};
+
+			//点击队列中任何一个元素，则该元素会被从队列中删除
+			queue.onclick = function(e){
+				e = e || window.event;
+				var t = e.target || e.srcElement;
+				var tagName = t.tagName;
+				if(tagName == 'SPAN'){
+					queue.removeChild(t);
+				}
+			}
+
+		})();
+
+	</script>
+</body>
+</html>
