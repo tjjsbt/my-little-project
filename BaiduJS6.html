@@ -79,7 +79,7 @@
     	var value = document.getElementById("query").value;
     	var re = new RegExp(value,"gi");		//模糊匹配的正则表达式还不会啊
     	for (var i = 0; i < queue.children.length; i++) {
-    		if (queue.children[i].textContent.match(re)) {
+    		if ( value != '' && queue.children[i].textContent.match(re)) {
     			queue.children[i].style.background = 'blue';
     		}
     		
