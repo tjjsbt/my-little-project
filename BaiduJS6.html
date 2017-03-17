@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>任务六：基础JavaScript练习（三）</title>
+    <style type="text/css">
+    span {
+        display: inline-block;
+        margin: 10px 5px;
+        padding: 0px 10px;
+        height: 30px;
+        background: red;
+        color: #fff;
+        line-height: 30px;
+        cursor: pointer;
+    }
+    
+    textarea {
+        width: 300px;
+    }
+    </style>
+</head>
+
+<body>
+    <textarea id="input">
+        HTML,CSS、JavaScript，前端 front-end jQuery Bootstrap Vue
+    </textarea>
+    <button id="left-in">左侧入</button>
+    <button id="right-in">右侧入</button>
+    <button id="left-out">左侧出</button>
+    <button id="right-out">右侧出</button>
+    <input type="text" id="query" placeholder="查询">
+    <button id="search">查询</button>
+    <div id="queue"></div>
+    <script type="text/javascript">
+    // leftIn方法，点击左侧入按钮将输入的数字从左侧添加
+    function leftIn(queue, value) {
+        for (var i = 0; i < value.length; i++) {
+            var span = document.createElement('span');
+            span.innerHTML = value[i];
+
+            queue.insertBefore(span, queue.childNodes[i]);
+        }
+    }
+    // rightIn方法，点击右侧入按钮将输入的数字从右侧添加
+    function rightIn(queue, value) {
+        for (var i = 0; i < value.length; i++) {
+
+
+            var span = document.createElement('span');
+            span.innerHTML = value[i];
+
+            queue.appendChild(span);
+        }
+
+
+
+    }
+    // leftOut方法，点击"左侧出"，读取并删除队列左侧第一个元素，并弹窗显示元素中数值；
+    function leftOut(queue) {
+        var child = queue.firstChild;
+        alert(child.textContent);
+        queue.removeChild(child);
+    }
+    // rightOut方法，点击"右侧出"，读取并删除队列又侧第一个元素，并弹窗显示元素中数值；
+    function rightOut(queue) {
+        var child = queue.lastChild;
+        alert(child.textContent);
+        queue.removeChild(child);
+    }
+    // 获取文本框内的文字
+    function getData() {
+        var value = document.getElementById('input').value.trim().split(/,+|，+|、+|\s+|\n+|\r+|\t+/);
+        return value;
+    }
+
+    function searchData(){
+    	var value = document.getElementById("query").value;
+    	var re = new RegExp(value,"gi");		//模糊匹配的正则表达式还不会啊
+    	for (var i = 0; i < queue.children.length; i++) {
+    		if (queue.children[i].textContent.match(re)) {
+    			queue.children[i].style.background = 'blue';
+    		}
+    		
+    	}
+    }
+
+    (function() {
+        var queue = document.getElementById('queue');
+
+        document.getElementById("left-in").onclick = function() {
+            var value = getData();
+            leftIn(queue, value);
+        };
+        document.getElementById("right-in").onclick = function() {
+            var value = getData();
+            rightIn(queue, value);
+        };
+        document.getElementById("left-out").onclick = function() {
+            leftOut(queue);
+        };
+        document.getElementById("right-out").onclick = function() {
+            rightOut(queue);
+        };
+        document.getElementById("search").onclick = function(){
+        	searchData();
+        };
+
+        //点击队列中任何一个元素，则该元素会被从队列中删除
+        queue.onclick = function(e) {
+            e = e || window.event;
+            var t = e.target || e.srcElement;
+            var tagName = t.tagName;
+            if (tagName == 'SPAN') {
+                queue.removeChild(t);
+            }
+        }
+
+    })();
+    </script>
+</body>
+
+</html>
