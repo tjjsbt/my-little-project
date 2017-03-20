@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>任务七：JavaScript和树（一）</title>
+    <style type="text/css">
+    div {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+        padding: 20px;
+        border: 1px solid #0e0e0e;
+        margin: 5px;
+        background: #fff;
+    }
+    #container{
+    	border: 0px;
+    }
+    p{
+    	margin: 0 auto;
+    	width: 220px;
+    }
+    </style>
+</head>
+
+<body>
+    <div id ="container">
+    	<!-- 二叉树盒子 -->
+        <div class="root">
+            <div class="level-1-l">
+                <div class="level-2-l">
+                    <div class="level-3-l"></div>
+                    <div class="level-3-r"></div>
+                </div>
+                <div class="level-2-r">
+                    <div class="level-3-l"></div>
+                    <div class="level-3-r"></div>
+                </div>
+            </div>
+            <div class="level-1-r">
+                <div class="level-2-l">
+                    <div class="level-3-l"></div>
+                    <div class="level-3-r"></div>
+                </div>
+                <div class="level-2-r">
+                    <div class="level-3-l"></div>
+                    <div class="level-3-r"></div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <!-- 排序按钮 -->
+    <p>
+        <button>中序遍历</button>
+        <button>先序遍历</button>
+        <button>后序遍历</button>
+    </p>
+    <script type="text/javascript">
+    	var tree = document.querySelector('div.root');
+    	var btns = document.querySelectorAll('button');
+    	var btn1 = btns[0];
+    	var btn2 = btns[1];
+    	var btn3 = btns[2];
+    	var data = [];
+    	var timer = null;
+    	(function(){
+    		btn1.onclick = function(){
+    			init();
+    			inOrder(tree);
+    			setCss();
+    			
+    		};
+    		btn2.onclick = function(){
+    			init();
+    			preOrder(tree);
+    			setCss();
+    		};
+    		btn3.onclick = function(){
+    			init();
+    			postOrder(tree);
+    			setCss();
+    		};
+
+    		//中序遍历
+    		function inOrder(node){
+    			if(node){
+    				inOrder(node.firstElementChild);
+    				data.push(node);
+    				inOrder(node.lastElementChild);
+    			}
+    		}
+
+    		//前序遍历
+    		function preOrder(node){
+    			if(node){
+    				data.push(node);
+    				preOrder(node.firstElementChild);
+    				preOrder(node.lastElementChild);
+    			}
+    		}
+
+    		//后序遍历
+    		function postOrder(node){
+    			if(node){
+    				postOrder(node.firstElementChild);
+    				postOrder(node.lastElementChild);
+    				data.push(node);
+    			}
+    		}
+
+    		//动态改变css
+    		function setCss(){
+    			var i = 0;
+    			data[i].style.background = 'blue';
+    			timer = setInterval(function(){
+    				i++;
+    				if(i < data.length){
+    					data[i-1].style.background = '#fff';
+    					data[i].style.background = 'blue';
+    				}else{
+    					clearInterval(timer);
+    					data[data.length-1].style.background = '#fff';
+    					alert("遍历结束!")
+    				}
+    			}, 500)
+    		}
+
+    		//初始化
+    		function init(){
+    			data = [];
+    			var div = document.querySelectorAll('div');
+    			clearInterval(timer);
+    			for (var i = 0; i < div.length; i++) {
+    				div[i].style.cssText = '';
+    			}
+    		}
+
+    	})();
+    </script>
+</body>
+
+</html>
