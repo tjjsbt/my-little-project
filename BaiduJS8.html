@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>任务八：JavaScript和树（二）</title>
+    <style type="text/css">
+    div {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        border: 1px solid #0e0e0e;
+        padding: 20px;
+    }
+    
+    .lev-2,
+    .lev-3 {
+        margin-right: 4px;
+    }
+    
+    p {
+        margin: 0 auto;
+        margin-top: 20px;
+        width: 200px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="root">Super
+        <div class="lev-1-l">Cc
+            <div class="lev-2 lev-2-l">Apple
+                <div class="lev-3 lev-3-1">pear</div>
+                <div class="lev-3 lev-3-2">pig</div>
+                <div class="lev-3 lev-3-3">cola</div>
+                <div class="lev-3 lev-3-4">soccer</div>
+            </div>
+            <div class="lev-2 lev-2-mid">Phone</div>
+            <div class="lev-2 lev-2-r">
+                <div class="lev-3 lev-3-1">Book</div>
+                <div class="lev-3 lev-3-2">School</div>
+            </div>
+        </div>
+        <div class="lev-1-mid">Note
+            <div class="lev-2 lev-2-l">Human
+                <div class="lev-3 lev-3-1">Code</div>
+                <div class="lev-3 lev-3-2">Operate</div>
+                <div class="lev-3 lev-3-3">Man</div>
+            </div>
+            <div class="lev-2 lev-2-r">Program
+                <div class="lev-3 lev-3-1">Bement
+                    <div class="lev-4-1">Cat</div>
+                </div>
+                <div class="lev-3 lev-3-2">Glass</div>
+            </div>
+        </div>
+        <div class="lev-1-r">Fish</div>
+    </div>
+    <p>
+        <button>深度优先</button>
+        <button>广度优先</button>
+    </p>
+    <script type="text/javascript">
+    var tree = document.querySelector('div.root');
+    var btns = document.querySelectorAll('button');
+    var btn1 = btns[0];
+    var btn2 = btns[1];
+    var data = [];
+    var timer = null;
+    (function() {
+        btn1.onclick = function() {
+            init();
+            traverseDF(tree);
+            setCss();
+
+        };
+        btn2.onclick = function() {
+            init();
+            traverseBF(tree);
+            setCss();
+        };
+
+        //深度优先遍历
+        function traverseDF() {
+            // this is a recurse and immediately-invoking function
+            (function recurse(currentNode) {
+                // step 2
+                for (var i = 0, length = currentNode.children.length; i < length; i++) {
+                    recurse(currentNode.children[i]);
+                }
+
+                //step 4
+                data.push(currentNode);
+                //step 1
+            })(tree);
+        };
+
+        //广度优先遍历
+        function traverseBF() {
+            var queue = new Queue();
+
+            queue.enqueue(tree);
+
+            currentTree = queue.dequeue();
+
+            while (currentTree) {
+                for (var i = 0, length = currentTree.children.length; i < length; i++) {
+                    queue.enqueue(currentTree.children[i]);
+                }
+
+                data.push(currentTree);
+                currentTree = queue.dequeue();
+            }
+        };
+
+        //队列辅助函数
+        function Queue() {
+            var items = [];
+            this.enqueue = function(element) {
+                items.push(element);
+            };
+            this.dequeue = function() {
+                return items.shift();
+            };
+            this.front = function() {
+                return items[0];
+            };
+            this.isEmpty = function() {
+                return items.length == 0;
+            };
+            this.size = function() {
+                return items.length;
+            };
+            this.print = function() {
+                console.log(items.toString());
+            };
+        }
+
+        //动态改变css
+        function setCss() {
+            var i = 0;
+            data[i].style.background = 'blue';
+            timer = setInterval(function() {
+                i++;
+                if (i < data.length) {
+                    data[i - 1].style.background = '#fff';
+                    data[i].style.background = 'blue';
+                } else {
+                    clearInterval(timer);
+                    data[data.length - 1].style.background = '#fff';
+                    alert("遍历结束!")
+                }
+            }, 500)
+        }
+
+        //初始化
+        function init() {
+            data = [];
+            var div = document.querySelectorAll('div');
+            clearInterval(timer);
+            for (var i = 0; i < div.length; i++) {
+                div[i].style.cssText = '';
+            }
+        }
+    })();
+    </script>
+</body>
+
+</html>
